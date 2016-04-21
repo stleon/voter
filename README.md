@@ -8,4 +8,8 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-+ создать переменную окружения **SECRET_KEY**
+Создать переменные окружения:
+
+- **SECRET_KEY**
+- **VK_OAUTH2_KEY**
+- **VK_OAUTH2_SECRET**
