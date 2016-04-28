@@ -105,4 +105,4 @@ SOCIAL_AUTH_VK_OAUTH2_KEY = os.getenv('VK_OAUTH2_KEY')
 SOCIAL_AUTH_VK_OAUTH2_SECRET = os.getenv('VK_OAUTH2_SECRET')
 SOCIAL_AUTH_VK_APP_USER_MODE = 2
 SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['photos', 'offline']
-SOCIAL_AUTH_EXTRA_DATA = ['sex', 'photo_200'] # https://vk.com/dev/fields
+SOCIAL_AUTH_EXTRA_DATA = ['sex', 'photo_200', 'first_name'] # https://vk.com/dev/fields

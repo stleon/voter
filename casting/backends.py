@@ -16,6 +16,7 @@ class CustomVKOAuth(VKOAuth2):
     EXTRA_DATA = [
         ('uid', 'id'),
         ('sex', 'sex'),
-        ('screen_name', 'screen_name')
+        ('screen_name', 'screen_name'),
+        ('first_name', 'first_name')
 
     ]
