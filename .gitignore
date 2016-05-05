@@ -88,3 +88,7 @@ ENV/
 .ropeproject
 
 *.sqlite3
+
+.idea
+.venv
+.DS_Store

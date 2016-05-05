@@ -16,6 +16,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'social.apps.django_app.default',
+    'rest_framework',
     'casting',
 ]
 
@@ -56,9 +57,11 @@ WSGI_APPLICATION = 'voter.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+    },
 }
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -80,7 +83,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LANGUAGE_CODE = 'ru-RU'
+LANGUAGE_CODE = 'en-EN'
 
 TIME_ZONE = 'Europe/Moscow'
 
@@ -106,3 +109,20 @@ SOCIAL_AUTH_VK_OAUTH2_SECRET = os.getenv('VK_OAUTH2_SECRET')
 SOCIAL_AUTH_VK_APP_USER_MODE = 2
 SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['photos', 'offline']
 SOCIAL_AUTH_EXTRA_DATA = ['sex', 'photo_200', 'first_name'] # https://vk.com/dev/fields
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ),
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.JSONParser',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+    ),
+}
