@@ -7,21 +7,18 @@ class CastingUser(models.Model):
     """
     user = models.OneToOneField(
         'auth.User',
-        name='user',
         verbose_name='Пользователь-участник',
     )
     url = models.URLField(
-        name='url',
         verbose_name='Ссылка на фотографию',
+        unique=True,
     )
     rating = models.IntegerField(
-        name='rating',
         verbose_name='Рейтинг фотографии',
         db_index=True,
         default=0,
     )
     counter = models.PositiveIntegerField(
-        name='counter',
         verbose_name='Количество проголосовавших',
         default=0,
     )
@@ -31,5 +28,5 @@ class CastingUser(models.Model):
         verbose_name = 'Участник голосования'
         verbose_name_plural = 'Участники голосования'
 
-    def __unicode__(self):
+    def __str__(self):
         return '{}'.format(self.user.username)
