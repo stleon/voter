@@ -9,4 +9,4 @@ class CastingUserSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = CastingUser
-        fields = ('user', 'url', 'rating', 'counter')
+        exclude = ('id', )
