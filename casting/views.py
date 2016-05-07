@@ -20,12 +20,10 @@ class CastingUserViewSet(viewsets.ModelViewSet):
 
     @list_route(methods=['GET'])
     def top(self, request):
-        # TODO integer division truncates the result
-        # http://www.postgresql.org/docs/current/static/functions-math.html
-        top_users = CastingUser.objects.order_by('-rating').annotate(
-            stars=ExpressionWrapper(
-                (F('rating') / F('counter') + 1) * 2.5,
-                output_field=FloatField())
-            )[:settings.USERS_ON_TOP_PAGE]
+        """
+        Топ N пользователей, позиции - индексы в списке
+        """
+        top_users = CastingUser.objects.order_by(
+            '-rating')[:settings.USERS_ON_TOP_PAGE]
         resp = TopSerializer(top_users, many=True)
         return Response(resp.data)

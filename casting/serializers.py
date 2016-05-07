@@ -22,7 +22,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
 class TopSerializer(CastingUserSerializer):
     info = UserSerializer(source='user')
-    stars = serializers.FloatField(label="Звезды")
 
-    class Meta(CastingUserSerializer.Meta):
-        pass
+    class Meta:
+        model = CastingUser
+        fields = ('user', 'info', 'url', 'rating', 'counter', 'stars', )
