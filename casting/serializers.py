@@ -11,7 +11,7 @@ class CastingUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CastingUser
-        exclude = ('id', )
+        fields = ('id', 'url', 'rating', 'counter', 'stars', 'position')
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -20,9 +20,9 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('first_name', )
 
 
-class TopSerializer(CastingUserSerializer):
+class TopSerializer(serializers.ModelSerializer):
     info = UserSerializer(source='user')
 
     class Meta:
         model = CastingUser
-        fields = ('user', 'info', 'url', 'rating', 'counter', 'stars', )
+        fields = ('id', 'info', 'url', 'rating', 'counter', 'stars', )
