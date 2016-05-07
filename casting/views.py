@@ -1,7 +1,11 @@
+from django.conf import settings
+from django.db.models import FloatField, ExpressionWrapper, F, Count
 from rest_framework import viewsets
+from rest_framework.decorators import list_route
+from rest_framework.response import Response
 
-from .models import CastingUser
-from .serializers import CastingUserSerializer
+from casting.models import CastingUser
+from casting.serializers import CastingUserSerializer, TopSerializer
 
 
 class CastingUserViewSet(viewsets.ModelViewSet):
@@ -11,3 +15,15 @@ class CastingUserViewSet(viewsets.ModelViewSet):
     """
     queryset = CastingUser.objects.all()
     serializer_class = CastingUserSerializer
+
+    @list_route(methods=['GET'])
+    def top(self, request):
+        # TODO integer division truncates the result
+        # http://www.postgresql.org/docs/current/static/functions-math.html
+        top_users = CastingUser.objects.order_by('-rating').annotate(
+            stars=ExpressionWrapper(
+                (F('rating') / F('counter') + 1) * 2.5,
+                output_field=FloatField())
+            )[:settings.USERS_ON_TOP_PAGE]
+        resp = TopSerializer(top_users, many=True)
+        return Response(resp.data)
