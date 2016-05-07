@@ -1,6 +1,6 @@
 # Voter
 
-Перед запуском
+## Перед запуском
 
 ```
 pyvenv-3.5 venv
@@ -16,3 +16,16 @@ pip install -r requirements.txt
 - **DB_NAME**
 - **DB_USER**
 - **DB_PASSWORD**
+
+### Создание бд и юзера
+
+```
+createuser --pwprompt voter_user
+createdb -O voter_user -Eutf8 voter_db
+```
+
+Далее нужно накатить миграции
+
+```
+python manage.py migrate
+```
