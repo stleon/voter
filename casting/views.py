@@ -1,4 +1,5 @@
 from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated
 
 from .models import CastingUser
 from .serializers import CastingUserSerializer
@@ -11,3 +12,4 @@ class CastingUserViewSet(viewsets.ModelViewSet):
     """
     queryset = CastingUser.objects.all()
     serializer_class = CastingUserSerializer
+    permission_classes = (IsAuthenticated, )
