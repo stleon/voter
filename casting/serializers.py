@@ -15,12 +15,18 @@ class CastingUserSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
+    """
+    Сериализатор модели пользователя
+    """
     class Meta:
         model = User
         fields = ('first_name', )
 
 
 class TopSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор модели участника на странице ТОП
+    """
     info = UserSerializer(source='user')
 
     class Meta:
