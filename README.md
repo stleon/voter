@@ -1,5 +1,29 @@
 # Voter
 
+Основано на идее из фильма **The Social Network**
+
+![The Social Network](http://images4.fanpop.com/image/photos/20500000/The-Social-Network-movie-still-the-social-network-movie-20534581-2560-1606.jpg)
+
+![The Social Network](http://productplacementblog.com/wp-content/uploads/2015/08/Dell-Product-Placement-in-The-Social-Network-Movie-1.jpg)
+
+## Основной функционал
+
+### Авторизация
+
+![Страница авторизации](design/scr1.png)
+
+### Выбор фото
+
+![Страница выбора фотографии](design/scr2.png)
+
+### Голосования
+
+![Страница голосований](design/scr3.png)
+
+### Результаты
+
+![Страница результатов](design/scr4.png)
+
 ## Перед запуском
 
 ```
