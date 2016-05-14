@@ -1,7 +1,8 @@
 from django.contrib.auth.models import User
+
 from rest_framework import serializers
 
-from .models import CastingUser
+from casting.models import CastingUser
 
 
 class CastingUserSerializer(serializers.ModelSerializer):
@@ -11,16 +12,17 @@ class CastingUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CastingUser
-        fields = ('id', 'url', 'rating', 'counter', 'stars', 'position')
+        fields = ('id', 'url', 'rating', 'counter', 'stars', 'position',)
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     """
     Сериализатор модели пользователя
     """
+
     class Meta:
         model = User
-        fields = ('first_name', )
+        fields = ('first_name',)
 
 
 class TopSerializer(serializers.ModelSerializer):
@@ -31,4 +33,4 @@ class TopSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CastingUser
-        fields = ('id', 'info', 'url', 'rating', 'counter', 'stars', )
+        fields = ('id', 'info', 'url', 'rating', 'counter', 'stars',)
