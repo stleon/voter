@@ -3,12 +3,10 @@ from django.views.generic import TemplateView
 
 from rest_framework import routers
 
-from .views import CastingUserViewSet
-
+from casting.views import CastingUserViewSet
 
 router = routers.DefaultRouter()
-router.register(r'casting-users', CastingUserViewSet)
-
+router.register(r'casting-users', CastingUserViewSet, base_name='casting-users')
 
 urlpatterns = [
     url(r'^', include(router.urls)),
