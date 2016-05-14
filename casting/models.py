@@ -39,5 +39,8 @@ class CastingUser(models.Model):
         http://www.postgresql.org/docs/current/static/functions-math.html
         но там "integer division truncates the result"
         """
-        k = self.rating / self.counter
-        return (k + 1) * 2.5
+        if self.rating and self.counter:
+            k = self.rating / self.counter
+            return (k + 1) * 2.5
+        else:
+            return 0
