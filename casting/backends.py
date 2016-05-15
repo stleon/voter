@@ -1,4 +1,4 @@
-from social.backends.vk import VKOAuth2, vk_api
+from social.backends.vk import VKOAuth2
 
 
 class CustomVKOAuth(VKOAuth2):
