@@ -1,4 +1,7 @@
 from django.db import models
+from hashlib import md5
+import random
+import string
 
 
 class CastingUser(models.Model):
@@ -35,7 +38,7 @@ class CastingUser(models.Model):
     @property
     def stars(self):
         """
-        Кол-во звезд у пользователя. Можно было бы использовать 
+        Кол-во звезд у пользователя. Можно было бы использовать
         http://www.postgresql.org/docs/current/static/functions-math.html
         но там "integer division truncates the result"
         """
@@ -44,3 +47,32 @@ class CastingUser(models.Model):
             return (k + 1) * 2.5
         else:
             return 0
+
+
+class Choice(models.Model):
+    '''
+    Possivble choice of two almost random people.
+
+    @TODO: Need remove records by ttl (Redis?)
+    '''
+    users = models.ManyToManyField(CastingUser)
+    salt = models.TextField(default=''.join(
+        random.choice(
+            string.ascii_lowercase + string.digits) for _ in range(8)))
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def get_uuids(self):
+        '''
+        Method for dynamic generation uuids for current voting
+
+        :return: Dict of CastingUser as key and voting UUID as value
+        :rtype: dict
+        '''
+        uuids = {}
+        for user in self.users.all():
+            uuid = md5(self.salt.encode())
+            uuid.update(bytes(self.id))
+            uuid.update(bytes(user.id))
+            uuid.update(str(self.created_at.timestamp()).encode())
+            uuids[uuid.hexdigest()] = user
+        return uuids
