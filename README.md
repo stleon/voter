@@ -88,8 +88,6 @@ X-Frame-Options: SAMEORIGIN
         "url": "http://new-photo12.jpg"
     }
 ]
-
-
 ```
 
 ### Просмотр конкретного участника
@@ -114,7 +112,6 @@ X-Frame-Options: SAMEORIGIN
     "stars": 0,
     "url": "http://new-new-photo.jpg"
 }
-
 ```
 ### Создание участника с выбранной фотографией
 ```
@@ -140,7 +137,6 @@ X-Frame-Options: SAMEORIGIN
     "url": "http://new-photo12.jpg",
     "user": 1
 }
-
 ```
 ### Редактирование участника
 ```
@@ -165,9 +161,7 @@ X-Frame-Options: SAMEORIGIN
     "stars": 0,
     "url": "http://new-new-photo.jpg"
 }
-
 ```
-
 ### Удаление участника
 ```
 DELETE /casting-users/{pk}/
@@ -181,8 +175,6 @@ Date: Tue, 17 May 2016 20:14:54 GMT
 Server: WSGIServer/0.2 CPython/3.5.1
 Vary: Accept, Cookie
 X-Frame-Options: SAMEORIGIN
-
-
 ```
 
 ### Топ участников
@@ -222,5 +214,4 @@ X-Frame-Options: SAMEORIGIN
         "url": "http://new-photo12.jpg"
     }
 ]
-
 ```
