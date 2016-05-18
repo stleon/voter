@@ -31,7 +31,18 @@ Vagrant.configure(2) do |config|
 
   config.vm.provision "shell", inline: <<-SHELL
 
-    sudo apt-get install -y libssl-dev openssl
+    sudo apt-get install -y libssl-dev openssl libpq-dev
+
+    # Install postgresql
+
+    sudo apt-get install -y postgresql postgresql-contrib
+
+    # sudo su postgres
+    # createuser -P voter_user
+    # createdb -O voter_user -Eutf8 voter_db
+
+    # Install Python
+
     wget https://www.python.org/ftp/python/3.5.1/Python-3.5.1.tgz
     tar xzvf Python-3.5.1.tgz
     cd Python-3.5.1
@@ -39,17 +50,10 @@ Vagrant.configure(2) do |config|
     make
     sudo make install
     sudo pip3 install --upgrade pip
-
-    sudo apt-get install -y libpq-dev
-    sudo apt-get install -y postgresql postgresql-contrib
-
     sudo pip3 install -r /opt/voter/requirements.txt
 
-    # sudo su postgres
-    # createuser -P voter_user
-    # createdb -O voter_user -Eutf8 voter_db
-
     # Configure locales
+
     sudo locale-gen ru_RU.UTF-8
     sudo update-locale
     sudo dpkg-reconfigure locales
