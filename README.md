@@ -59,37 +59,168 @@ python manage.py migrate
 ### Список участников
 ```
 GET /casting-users/
-curl -X GET http://app-host/casting-users/
+
+http GET http://127.0.0.1:8000/casting-users/
+
+HTTP/1.0 200 OK
+Allow: GET, POST, HEAD, OPTIONS
+Content-Type: application/json
+Date: Tue, 17 May 2016 20:30:08 GMT
+Server: WSGIServer/0.2 CPython/3.5.1
+Vary: Accept, Cookie
+X-Frame-Options: SAMEORIGIN
+
+[
+    {
+        "counter": 0,
+        "id": 2,
+        "position": 2,
+        "rating": 0,
+        "stars": 0,
+        "url": "http://new-new-photo.jpg"
+    },
+    {
+        "counter": 0,
+        "id": 8,
+        "position": 2,
+        "rating": 0,
+        "stars": 0,
+        "url": "http://new-photo12.jpg"
+    }
+]
+
+
 ```
 
 ### Просмотр конкретного участника
 ```
 GET /casting-users/{pk}/
-curl -X GET http://app-host/casting-users/{pk}/
+
+http http://127.0.0.1:8000/casting-users/2/
+
+HTTP/1.0 200 OK
+Allow: GET, PUT, PATCH, DELETE, HEAD, OPTIONS
+Content-Type: application/json
+Date: Tue, 17 May 2016 20:30:29 GMT
+Server: WSGIServer/0.2 CPython/3.5.1
+Vary: Accept, Cookie
+X-Frame-Options: SAMEORIGIN
+
+{
+    "counter": 0,
+    "id": 2,
+    "position": 2,
+    "rating": 0,
+    "stars": 0,
+    "url": "http://new-new-photo.jpg"
+}
+
 ```
 ### Создание участника с выбранной фотографией
 ```
 POST /casting-users/
-curl -H 'Content-type: application/json' -X PUT -d '{"url": "http://new-photo.jpg", "user": "{pk}"}' http://app-host/casting-users/
+
+http POST http://127.0.0.1:8000/casting-users/ url=http://new-photo12.jpg user=1
+
+HTTP/1.0 201 Created
+Allow: GET, POST, HEAD, OPTIONS
+Content-Type: application/json
+Date: Tue, 17 May 2016 20:25:47 GMT
+Location: http://new-photo12.jpg
+Server: WSGIServer/0.2 CPython/3.5.1
+Vary: Accept, Cookie
+X-Frame-Options: SAMEORIGIN
+
+{
+    "counter": 0,
+    "id": 8,
+    "position": 2,
+    "rating": 0,
+    "stars": 0,
+    "url": "http://new-photo12.jpg",
+    "user": 1
+}
+
 ```
 ### Редактирование участника
 ```
 PUT /casting-users/{pk}/
-curl -H 'Content-type: application/json' -X PUT -d '{"url": "http://new-photo.jpg", "user": "{pk}"}' http://app-host/casting-users/{pk}/
-
 PATCH /casting-users/{pk}/
-curl -H 'Content-type: application/json' -X PATCH -d '{"url": "http://new-photo.jpg"}' http://app-host/casting-users/{pk}/
+
+http PUT http://127.0.0.1:8000/casting-users/2/ url=http://new-new-photo.jpg
+
+HTTP/1.0 200 OK
+Allow: GET, PUT, PATCH, DELETE, HEAD, OPTIONS
+Content-Type: application/json
+Date: Tue, 17 May 2016 20:31:18 GMT
+Server: WSGIServer/0.2 CPython/3.5.1
+Vary: Accept, Cookie
+X-Frame-Options: SAMEORIGIN
+
+{
+    "counter": 0,
+    "id": 2,
+    "position": 2,
+    "rating": 0,
+    "stars": 0,
+    "url": "http://new-new-photo.jpg"
+}
+
 ```
 
 ### Удаление участника
 ```
 DELETE /casting-users/{pk}/
-curl -X DELETE http://app-host/casting-users/{pk}/
+
+http DELETE http://127.0.0.1:8000/casting-users/1/
+
+HTTP/1.0 204 No Content
+Allow: GET, PUT, PATCH, DELETE, HEAD, OPTIONS
+Content-Length: 0
+Date: Tue, 17 May 2016 20:14:54 GMT
+Server: WSGIServer/0.2 CPython/3.5.1
+Vary: Accept, Cookie
+X-Frame-Options: SAMEORIGIN
+
+
 ```
 
 ### Топ участников
 
 ```
 GET /casting-users/top/
-curl -X GET http://app-host/casting-users/top/
+
+http GET http://127.0.0.1:8000/casting-users/top/
+
+HTTP/1.0 200 OK
+Allow: GET, HEAD, OPTIONS
+Content-Type: application/json
+Date: Tue, 17 May 2016 20:31:45 GMT
+Server: WSGIServer/0.2 CPython/3.5.1
+Vary: Accept, Cookie
+X-Frame-Options: SAMEORIGIN
+
+[
+    {
+        "counter": 0,
+        "id": 2,
+        "info": {
+            "first_name": "Лев"
+        },
+        "rating": 0,
+        "stars": 0,
+        "url": "http://new-new-photo.jpg"
+    },
+    {
+        "counter": 0,
+        "id": 8,
+        "info": {
+            "first_name": ""
+        },
+        "rating": 0,
+        "stars": 0,
+        "url": "http://new-photo12.jpg"
+    }
+]
+
 ```
