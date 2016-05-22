@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
 
 # Configuration
-APP_HOST = "10.10.10.106"
+APP_HOST = "192.168.50.4"
 APP_HOSTNAME = "voter.local"
 MOUNT_DIR = "/opt/voter"
 
@@ -31,15 +31,14 @@ Vagrant.configure(2) do |config|
 
   config.vm.provision "shell", inline: <<-SHELL
 
-    sudo apt-get install -y libssl-dev openssl libpq-dev
+    sudo apt-get install -y libssl-dev openssl libpq-dev nginx
 
     # Install postgresql
 
     sudo apt-get install -y postgresql postgresql-contrib
 
-    # sudo su postgres
-    # createuser -P voter_user
-    # createdb -O voter_user -Eutf8 voter_db
+    sudo -u postgres psql -c "CREATE USER voter_user WITH PASSWORD '123';"
+    sudo su postgres -c "createdb -O voter_user -Eutf8 voter_db"
 
     # Install Python
 
@@ -58,6 +57,12 @@ Vagrant.configure(2) do |config|
     sudo update-locale
     sudo dpkg-reconfigure locales
     sudo timedatectl set-timezone Europe/Moscow
+
+    # Configure nginx
+
+    sudo rm /etc/nginx/sites-enabled/default
+    sudo ln -s /opt/voter/etc/nginx.vagrant.example /etc/nginx/sites-enabled/default
+    sudo service nginx restart
 
     SHELL
 end
