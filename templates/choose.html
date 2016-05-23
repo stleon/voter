@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Document</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
   <link href="../frontend/static/application/application.css" type="text/css" rel="stylesheet" />
 </head>
 <body>
@@ -11,16 +12,20 @@
   </div>
   <div class="content">
     <div class="container">
-      <div class="choose">
-        <ul class="choose-list">
-          <li class="choose-item"><img src=""></li>
-          <li class="choose-item"><img src=""></li>
-          <li class="choose-item"><img src=""></li>
-          <li class="choose-item"><img src=""></li>
-          <li class="choose-item"><img src=""></li>
-        </ul>
+      <div class="choose-wrapper">
+        <div class="choose">
+          <h1 class="title _choose"><i class="title-image _choose"></i><span class="title-info _choose">Тебе нужно выбрать свое самое классное фото, ведь по нему будут оценивать тебя.</span></h1>
+          <div class="choose-list">
+            <span class="choose-item"><img class="choose-item-image js-choose-image" src="" /></span>
+            <span class="choose-item"><img class="choose-item-image js-choose-image" src="" /></span>
+            <span class="choose-item"><img class="choose-item-image js-choose-image" src="" /></span>
+            <span class="choose-item"><img class="choose-item-image js-choose-image" src="" /></span>
+          </div>
+          <span class="btn vote-btn">Готово</span>
+        </div>
       </div>
     </div>
   </div>
+  <script src="../frontend/static/application/application.js" type="text/javascript"></script>
 </body>
 </html>
