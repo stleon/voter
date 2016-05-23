@@ -1,15 +1,3 @@
-'https://api.vk.com/method/photos.get?owner_id=' + 'VKID' + '&album_id=profile' // VKID from API GET photo user
-
-'/casting-users/id' // - ID USER 
-
-'/choices/' // - list POST
-'/choices/id' // + uuid (data) from /choices/ PUT
-
-
-'/casting-users/top/' // for list.html
-
-'/casting-users/1/' //
-
 'use strict';
 
 var nodes = nodes || {};
@@ -63,7 +51,7 @@ methods = {
   },
   getImages: function(){
     //.choose
-    methods.requests(urls.images.start + ids.vk + urls.images.end, 'get', '', methods.viewImages);
+    methods.requests_vk(urls.images.start + ids.vk + urls.images.end, 'get', '', methods.viewImages);
   },
   vote: function(el){
     var item = el.parents('.vote-item');
@@ -157,7 +145,13 @@ methods = {
 
     if(item.length < 1) return false;
 
-    methods.requests(urls.casting + ids.user + '/', 'patch', json);
+    var plzgo = function(){
+      window.open("/votes/","_self")
+    }
+
+    methods.requests(urls.casting + ids.user + '/', 'patch', json, plzgo());
+
+    
   },
   eventSets: function(){
     nodes.body.on({
