@@ -2,12 +2,19 @@
 <html>
 <head>
     <link rel="stylesheet" href="{% static "static/application/application.css" %}">
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
 </head>
 <body>
-<h1 class="btn">Base</h1>
-{% block application %}
+  <div class="header">
+    <a href="/" class="logo"></a>
+  </div>
+  <div class="content">
+      <div class="container">
+      {% block application %}
 
-{% endblock %}
+      {% endblock %}
+    </div>
+  </div>
+  <script src="{% static "static/application/application.js" %}" type="text/javascript"></script>
 </body>
 </html>
