@@ -104,7 +104,6 @@ methods = {
         }
       ]
     }
-    console.log(data)
     methods.viewImages(data);
   },
   vote: function(el){
@@ -136,10 +135,14 @@ methods = {
       nodes.choose_list.append( $( t.images(imgs[0]) ) );
     }
   },
-  viewVote: function(){
+  viewVote: function(data){
+    console.log(data);
     for(var i = 0; i < 2; i++){
       nodes.vote_list.append( $( t.vote() ) );
     }
+  },
+  viewTop: function(data){
+    console.log(data);
   },
   sendChoose: function(){
     var item = nodes.body.find('._choose-choose');
@@ -148,7 +151,10 @@ methods = {
     var obj = {url: src};
     var json = JSON.stringify(obj);
 
+    if(item.length < 1) return false;
+
     methods.requests(urls.casting + ids.user + '/', 'patch', json);
+    window.open('/votes/');
   },
   eventSets: function(){
     nodes.body.on({
@@ -162,6 +168,7 @@ methods = {
   },
   init: function(){
     this.eventSets();
+    nodes.toplist = nodes.body.find('.toplist');
     nodes.choose_list = nodes.body.find('.choose-list');
     nodes.vote_list = nodes.body.find('.vote-list');
     nodes.choose = nodes.body.find('.choose');
@@ -171,7 +178,9 @@ methods = {
 
     // if(nodes.choose.length > 0) methods.getImages();
     if(nodes.choose.length > 0) methods.fakeGetImages();
-    if(nodes.vote_list.length > 0) methods.viewVote();
+    // if(nodes.vote_list.length > 0) methods.viewVote();
+    if(nodes.vote_list.length > 0) methods.requests(urls.choices, 'post', '', methods.viewVote);
+    if(nodes.toplist.length > 0) methods.requests(urls.casting + 'top/', 'get', '', methods.viewTop);
   }
 }
 
