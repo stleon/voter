@@ -91,7 +91,7 @@ methods = {
     }
 
     for(var i = 0; i < 4; i++){
-      nodes.choose_list.append( $( t.images(imgs[0]) ) );
+      nodes.choose_list.append( $( t.images(imgs[i]) ) );
     }
   },
   viewVote: function(data){
