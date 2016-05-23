@@ -99,6 +99,7 @@
 	
 	methods = {
 	  requests: function(url, type, data, callback, el){
+	    console.log(url)
 	    $.ajax({
 	      url: url,
 	      data: data,
@@ -107,6 +108,11 @@
 	        if(callback) callback(data);
 	      }
 	    })
+	  },
+	  getImages: function(){
+	    //.choose
+	    var id = nodes.choose.data('vk');
+	    methods.requests(urls.images.start + id + urls.images.end, 'get', methods.viewImages);
 	  },
 	  vote: function(el){
 	    var item = el.parents('.vote-item');
@@ -123,6 +129,9 @@
 	    check.removeClass('_choose-choose');
 	    item.toggleClass('_choose-choose');
 	    
+	  },
+	  viewImages: function(data){
+	    console.log(data);
 	  },
 	  viewVote: function(){
 	    for(var i = 0; i < 2; i++){
@@ -141,6 +150,9 @@
 	  init: function(){
 	    this.eventSets();
 	    nodes.vote_list = nodes.body.find('.vote-list');
+	    nodes.choose = nodes.body.find('.choose');
+	
+	    if(nodes.choose.length > 0) methods.getImages();
 	    if(nodes.vote_list.length > 0) methods.viewVote();
 	  }
 	}
