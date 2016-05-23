@@ -15,4 +15,13 @@ urlpatterns = [
     url(r'^vk-login',
         TemplateView.as_view(template_name="login.html"),
         name='login'),
+    url(r'^choice-photo',
+        TemplateView.as_view(template_name="choice_photo.html"),
+        name='choice-photo'),
+    url(r'^votes',
+        TemplateView.as_view(template_name="votes.html"),
+        name='votes'),
+    url(r'^top',
+        TemplateView.as_view(template_name="top.html"),
+        name='top'),
 ]

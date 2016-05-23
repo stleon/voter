@@ -1,10 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block application %}
+
+<h1>Логин</h1>
 <a href="{% url 'social:begin' 'vk-oauth2' %}">Login</a>
-</body>
-</html>
+
+{% endblock %}
