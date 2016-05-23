@@ -2,6 +2,7 @@ from django.db import models
 from hashlib import md5
 import random
 import string
+from django.db.models.signals import pre_save
 
 
 class CastingUser(models.Model):
@@ -14,6 +15,7 @@ class CastingUser(models.Model):
     rating = models.IntegerField(verbose_name='Рейтинг фотографии',
                                  db_index=True,
                                  default=0, )
+    sex = models.IntegerField(verbose_name='Пол', default=0)
     counter = models.PositiveIntegerField(
         verbose_name='Количество проголосовавших',
         default=0, )
@@ -76,3 +78,10 @@ class Choice(models.Model):
             uuid.update(str(self.created_at.timestamp()).encode())
             uuids[uuid.hexdigest()] = user
         return uuids
+
+
+def casting_user_pre_save(sender, instance, **kwargs):
+    instance.sex = instance.user.social_auth.get(
+        provider='vk-oauth2').extra_data.get('sex', 0)
+
+pre_save.connect(casting_user_pre_save, CastingUser)

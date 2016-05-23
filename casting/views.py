@@ -35,6 +35,11 @@ class ChoiceUserViewSet(viewsets.ViewSet):
     '''
     API endpoint for creating unique user voting combinations
     and saving result of votes.
+
+    POR FAVOR!
+
+    API ендпоит для создания уникальной комбинации пользователей
+    для голосования и сохранения результатов выбора.
     '''
     queryset = Choice.objects.all()
     serializer_class = CastingUserSerializer
@@ -42,10 +47,23 @@ class ChoiceUserViewSet(viewsets.ViewSet):
     def create(self, request):
         '''
         Create new choice and return uuids and photo url of users.
+
+        POR FAVOR!
+
+        Создаёт новый объект выбора и возвращает уникальные uuid
+        и фотографии пользователейпользователей
         '''
-        users = random.sample(
-            list(CastingUser.objects.order_by('counter')[:100]), 2)
-        print(users)
+        castinguser = request.user.castinguser
+        user = request.user.social_auth
+
+        if castinguser.sex > 0:
+            users = random.sample(
+                list(CastingUser.objects.exclude(sex=castinguser.sex).order_by(
+                    'counter').exclude(id=castinguser.id)[:100]), 2)
+        else:
+            users = random.sample(
+                list(CastingUser.objects.order_by('counter').exclude(
+                    id=castinguser.id)[:100]), 2)
         choice = Choice()
         choice.save()
         for user in users:
@@ -59,6 +77,9 @@ class ChoiceUserViewSet(viewsets.ViewSet):
         return Response(resp)
 
     def update(self, request, pk=None):
+        '''
+        Обсчитывает выбор пользователя при голосовании и обновляет рейтинг.
+        '''
         if pk is not None:
             try:
                 choice = Choice.objects.get(pk=pk)
