@@ -15,6 +15,7 @@
 var nodes = nodes || {};
 var methods = methods || {};
 var urls = urls || {};
+var ids = ids || {};
 
 var t = require('./templates');
 
@@ -31,11 +32,12 @@ nodes.body = $('body');
 
 methods = {
   requests: function(url, type, data, callback, el){
-    console.log(url)
+    console.log(arguments)
     $.ajax({
       url: url,
       data: data,
       type: type,
+      crossDomain: true,
       success: function(data){
         if(callback) callback(data);
       }
@@ -43,8 +45,67 @@ methods = {
   },
   getImages: function(){
     //.choose
-    var id = nodes.choose.data('vk');
-    methods.requests(urls.images.start + id + urls.images.end, 'get', methods.viewImages);
+    methods.requests(urls.images.start + ids.vk + urls.images.end, 'get', '', methods.viewImages);
+  },
+  fakeGetImages: function(){
+    data = {
+      "response": [
+        {
+        "pid": 215187843,
+        "aid": -6,
+        "owner_id": 1,
+        "src": "http://cs210.vk.me/v210001/2/XF7JgWq3Chc.jpg",
+        "src_big": "http://cs210.vk.me/v210001/3/7ZzaHxmob4A.jpg",
+        "src_small": "http://cs210.vk.me/v210001/1/fxqypKXX8Bg.jpg",
+        "src_xbig": "http://cs210.vk.me/v210001/4/6Ky-XWCj0LM.jpg",
+        "src_xxbig": "http://cs210.vk.me/v210001/5/3E2MaC_4Gm8.jpg",
+        "src_xxxbig": "http://cs210.vk.me/v210001/6/53_VwoACy4I.jpg",
+        "width": 2560,
+        "height": 1913,
+        "text": "",
+        "created": 1296326714
+        },
+        {
+        "pid": 263219656,
+        "aid": -6,
+        "owner_id": 1,
+        "src": "http://cs9591.vk.me/u00001/136592355/m_672c7bad.jpg",
+        "src_big": "http://cs9591.vk.me/u00001/136592355/x_dbfafe4c.jpg",
+        "src_small": "http://cs9591.vk.me/u00001/136592355/s_2606f012.jpg",
+        "src_xbig": "http://cs9591.vk.me/u00001/136592355/y_7c7b186e.jpg",
+        "src_xxbig": "http://cs9591.vk.me/u00001/136592355/z_17426819.jpg",
+        "src_xxxbig": "http://cs9591.vk.me/u00001/136592355/w_818d6f79.jpg",
+        "text": "",
+        "created": 1307883624
+        },
+        {
+        "pid": 263219735,
+        "aid": -6,
+        "owner_id": 1,
+        "src": "http://cs9591.vk.me/u00001/136592355/m_5f3fd6ac.jpg",
+        "src_big": "http://cs9591.vk.me/u00001/136592355/x_d51dbfac.jpg",
+        "src_small": "http://cs9591.vk.me/u00001/136592355/s_39db64b7.jpg",
+        "src_xbig": "http://cs9591.vk.me/u00001/136592355/y_8cc51452.jpg",
+        "src_xxbig": "http://cs9591.vk.me/u00001/136592355/z_90874cc2.jpg",
+        "src_xxxbig": "http://cs9591.vk.me/u00001/136592355/w_f6a60338.jpg",
+        "text": "",
+        "created": 1307883759
+        },
+        {
+        "pid": 278184324,
+        "aid": -6,
+        "owner_id": 1,
+        "src": "http://cs10408.vk.me/u4172580/-6/m_79ab6f4a.jpg",
+        "src_big": "http://cs10408.vk.me/u4172580/-6/x_ee97448e.jpg",
+        "src_small": "http://cs10408.vk.me/u4172580/-6/s_24887a5a.jpg",
+        "text": "",
+        "created": 1328126422,
+        "post_id": 45430
+        }
+      ]
+    }
+    console.log(data)
+    methods.viewImages(data);
   },
   vote: function(el){
     var item = el.parents('.vote-item');
@@ -60,15 +121,34 @@ methods = {
 
     check.removeClass('_choose-choose');
     item.toggleClass('_choose-choose');
-    
+
+    //ids.vk
   },
   viewImages: function(data){
-    console.log(data);
+    var imgs = [];
+    var obj = data.response
+
+    for(var prop in obj){
+      imgs.push(obj[prop].src)
+    }
+
+    for(var i = 0; i < 4; i++){
+      nodes.choose_list.append( $( t.images(imgs[0]) ) );
+    }
   },
   viewVote: function(){
     for(var i = 0; i < 2; i++){
       nodes.vote_list.append( $( t.vote() ) );
     }
+  },
+  sendChoose: function(){
+    var item = nodes.body.find('._choose-choose');
+    var img = item.find('img');
+    var src = img.attr('src');
+    var obj = {url: src};
+    var json = JSON.stringify(obj);
+
+    methods.requests(urls.casting + ids.user + '/', 'patch', json);
   },
   eventSets: function(){
     nodes.body.on({
@@ -76,15 +156,21 @@ methods = {
         var $target = $( event.target );
         if($target.hasClass('js-vote-image')) methods.vote($target);
         if($target.hasClass('js-choose-image')) methods.choose($target);
+        if($target.hasClass('js-choose-send')) methods.sendChoose();
       }
     })
   },
   init: function(){
     this.eventSets();
+    nodes.choose_list = nodes.body.find('.choose-list');
     nodes.vote_list = nodes.body.find('.vote-list');
     nodes.choose = nodes.body.find('.choose');
 
-    if(nodes.choose.length > 0) methods.getImages();
+    ids.vk = nodes.choose.data('vk');
+    ids.user = nodes.choose.data('id');
+
+    // if(nodes.choose.length > 0) methods.getImages();
+    if(nodes.choose.length > 0) methods.fakeGetImages();
     if(nodes.vote_list.length > 0) methods.viewVote();
   }
 }

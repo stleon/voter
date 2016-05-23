@@ -2,6 +2,13 @@
 
 var templates = templates || {};
 templates = {
+  images: function(item){
+    var tmp = [];
+    tmp.push('<span class="choose-item"><img class="choose-item-image js-choose-image" src="');
+    tmp.push(item);
+    tmp.push('" /></span>');
+    return tmp.join('');
+  },
   vote: function(obj){
     var tmp = [];
 
