@@ -83,6 +83,6 @@ class ChoiceUserViewSet(viewsets.ViewSet):
         return(Response('You vote was accepted'))
 
 
-def vk_login(request):
+def choice_photo(request):
     vk_id = request.user.social_auth.get(provider='vk-oauth2').uid
-    return render(request, 'login.html', {'vk_id': vk_id})
+    return render(request, 'choice_photo.html', {'vk_id': vk_id})
