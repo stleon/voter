@@ -1,11 +1,12 @@
 import random
 
 from django.conf import settings
+from django.shortcuts import render
 
 from rest_framework import viewsets, status
 from rest_framework.decorators import list_route
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+
 
 from casting.models import CastingUser, Choice
 from casting.serializers import CastingUserSerializer, TopSerializer
@@ -80,3 +81,8 @@ class ChoiceUserViewSet(viewsets.ViewSet):
                 user.save()
             choice.delete()
         return(Response('You vote was accepted'))
+
+
+def vk_login(request):
+    vk_id = request.user.social_auth.get(provider='vk-oauth2').uid
+    return render(request, 'login.html', {'vk_id': vk_id})
