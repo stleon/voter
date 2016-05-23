@@ -16,13 +16,15 @@ var nodes = nodes || {};
 var methods = methods || {};
 var urls = urls || {};
 var ids = ids || {};
+var timer;
+var csrftoken;
 
 var t = require('./templates');
 
 urls = {
   images: {
     start: 'https://api.vk.com/method/photos.get?owner_id=',
-    end: '&album_id=profile'
+    end: '&album_id=profile&callback=callbackFunc',
   },
   casting: '/casting-users/',
   choices: '/choices/'
@@ -32,13 +34,29 @@ nodes.body = $('body');
 
 methods = {
   requests: function(url, type, data, callback, el){
-    console.log(arguments)
     $.ajax({
       url: url,
       data: data,
       type: type,
-      crossDomain: true,
+      contentType: "application/json",
+      dataType: 'json',
+      headers: {
+        'X-CSRFToken': csrftoken
+      },
       success: function(data){
+        console.log('data', data);
+        if(callback) callback(data);
+      }
+    })
+  },
+  requests_vk: function(url, type, data, callback, el){
+    $.ajax({
+      url: url,
+      data: data,
+      type: type,
+      dataType: 'jsonp',
+      success: function(data){
+        console.log('data', data);
         if(callback) callback(data);
       }
     })
@@ -47,71 +65,24 @@ methods = {
     //.choose
     methods.requests(urls.images.start + ids.vk + urls.images.end, 'get', '', methods.viewImages);
   },
-  fakeGetImages: function(){
-    data = {
-      "response": [
-        {
-        "pid": 215187843,
-        "aid": -6,
-        "owner_id": 1,
-        "src": "http://cs210.vk.me/v210001/2/XF7JgWq3Chc.jpg",
-        "src_big": "http://cs210.vk.me/v210001/3/7ZzaHxmob4A.jpg",
-        "src_small": "http://cs210.vk.me/v210001/1/fxqypKXX8Bg.jpg",
-        "src_xbig": "http://cs210.vk.me/v210001/4/6Ky-XWCj0LM.jpg",
-        "src_xxbig": "http://cs210.vk.me/v210001/5/3E2MaC_4Gm8.jpg",
-        "src_xxxbig": "http://cs210.vk.me/v210001/6/53_VwoACy4I.jpg",
-        "width": 2560,
-        "height": 1913,
-        "text": "",
-        "created": 1296326714
-        },
-        {
-        "pid": 263219656,
-        "aid": -6,
-        "owner_id": 1,
-        "src": "http://cs9591.vk.me/u00001/136592355/m_672c7bad.jpg",
-        "src_big": "http://cs9591.vk.me/u00001/136592355/x_dbfafe4c.jpg",
-        "src_small": "http://cs9591.vk.me/u00001/136592355/s_2606f012.jpg",
-        "src_xbig": "http://cs9591.vk.me/u00001/136592355/y_7c7b186e.jpg",
-        "src_xxbig": "http://cs9591.vk.me/u00001/136592355/z_17426819.jpg",
-        "src_xxxbig": "http://cs9591.vk.me/u00001/136592355/w_818d6f79.jpg",
-        "text": "",
-        "created": 1307883624
-        },
-        {
-        "pid": 263219735,
-        "aid": -6,
-        "owner_id": 1,
-        "src": "http://cs9591.vk.me/u00001/136592355/m_5f3fd6ac.jpg",
-        "src_big": "http://cs9591.vk.me/u00001/136592355/x_d51dbfac.jpg",
-        "src_small": "http://cs9591.vk.me/u00001/136592355/s_39db64b7.jpg",
-        "src_xbig": "http://cs9591.vk.me/u00001/136592355/y_8cc51452.jpg",
-        "src_xxbig": "http://cs9591.vk.me/u00001/136592355/z_90874cc2.jpg",
-        "src_xxxbig": "http://cs9591.vk.me/u00001/136592355/w_f6a60338.jpg",
-        "text": "",
-        "created": 1307883759
-        },
-        {
-        "pid": 278184324,
-        "aid": -6,
-        "owner_id": 1,
-        "src": "http://cs10408.vk.me/u4172580/-6/m_79ab6f4a.jpg",
-        "src_big": "http://cs10408.vk.me/u4172580/-6/x_ee97448e.jpg",
-        "src_small": "http://cs10408.vk.me/u4172580/-6/s_24887a5a.jpg",
-        "text": "",
-        "created": 1328126422,
-        "post_id": 45430
-        }
-      ]
-    }
-    methods.viewImages(data);
-  },
   vote: function(el){
     var item = el.parents('.vote-item');
     var check = nodes.body.find('._choose-vote');
 
+    var id = nodes.vote_list.attr('data-vote-id');
+    var uuid = item.attr('data-uuid');
+
     check.removeClass('_choose-vote');
     item.toggleClass('_choose-vote');
+
+    methods.requests(urls.choices + id + '/', 'put', '"' + uuid + '"', methods.reloadVote);
+  },
+  reloadVote: function(){
+    if(timer) clearTimeout(timer);
+    timer = setTimeout(function(){
+      nodes.vote_list.html('');
+      methods.requests(urls.choices, 'post', '', methods.viewVote);
+    }, 250)
     
   },
   choose: function(el){
@@ -136,13 +107,46 @@ methods = {
     }
   },
   viewVote: function(data){
-    console.log(data);
-    for(var i = 0; i < 2; i++){
-      nodes.vote_list.append( $( t.vote() ) );
+    var obj = data;
+    var tmp = {};
+    nodes.vote_list.attr('data-vote-id', obj.id);
+
+    for(var i = 0; i < obj.users.length; i++){
+      // nodes.vote_list.append( $( t.vote() ) );
+      var user = obj.users[i];
+      for(var prop in user){
+        nodes.vote_list.append( $( t.vote(prop, user[prop]) ) );
+      }
     }
+
   },
   viewTop: function(data){
-    console.log(data);
+    var tmp = tmp || {};
+    var id = nodes.body.attr('data-user');
+
+    var view = function(){
+      var count = 0;
+      for(var prop in tmp){
+        nodes.toplist.append( $(t.top(tmp[prop], count, id)) );
+        count++;
+      }
+    }
+
+    var diff = function(obj){
+      tmp[obj.rating] = obj;
+      pars(data);
+    };
+
+    var pars = function(data){
+      for(var i = 0; i < data.length; i++){
+        // nodes.toplist.append( $(t.top(data[i], i)) );
+        tmp[data[i].rating] = data[i];
+      }
+
+      view();
+    };
+
+    methods.requests(urls.casting + id + '/', 'get', '', diff);
   },
   sendChoose: function(){
     var item = nodes.body.find('._choose-choose');
@@ -154,7 +158,6 @@ methods = {
     if(item.length < 1) return false;
 
     methods.requests(urls.casting + ids.user + '/', 'patch', json);
-    window.open('/votes/');
   },
   eventSets: function(){
     nodes.body.on({
@@ -166,9 +169,17 @@ methods = {
       }
     })
   },
+  csrftoken: function(name) {
+    var matches = document.cookie.match(new RegExp(
+      "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+    ));
+    return matches ? decodeURIComponent(matches[1]) : undefined;
+  },
   init: function(){
+    csrftoken = methods.csrftoken('csrftoken');
+
     this.eventSets();
-    nodes.toplist = nodes.body.find('.toplist');
+    nodes.toplist = nodes.body.find('.toplist-list');
     nodes.choose_list = nodes.body.find('.choose-list');
     nodes.vote_list = nodes.body.find('.vote-list');
     nodes.choose = nodes.body.find('.choose');
@@ -176,12 +187,16 @@ methods = {
     ids.vk = nodes.choose.data('vk');
     ids.user = nodes.choose.data('id');
 
-    // if(nodes.choose.length > 0) methods.getImages();
-    if(nodes.choose.length > 0) methods.fakeGetImages();
-    // if(nodes.vote_list.length > 0) methods.viewVote();
+    if(nodes.choose.length > 0) methods.getImages();
     if(nodes.vote_list.length > 0) methods.requests(urls.choices, 'post', '', methods.viewVote);
     if(nodes.toplist.length > 0) methods.requests(urls.casting + 'top/', 'get', '', methods.viewTop);
+
+    
   }
 }
 
 methods.init();
+
+function callbackFunc(result){
+  console.log(result);
+}

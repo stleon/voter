@@ -321,8 +321,8 @@ body {
     .vote-item:first-child {
       margin-left: 0; }
     .vote-item img {
-      height: inherit;
-      width: inherit; }
+      height: 400px;
+      width: 300px; }
     .vote-item._choose-vote {
       border-color: #2195bb; }
       .vote-item._choose-vote:before {
