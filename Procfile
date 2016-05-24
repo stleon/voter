@@ -1,1 +1,1 @@
-web: gunicorn voter/wsgi.py --log-file -
+web: gunicorn voter.wsgi --log-file -
