@@ -5,3 +5,4 @@ djangorestframework==3.3.3
 httpie==0.9.3
 dj-database-url==0.4.1
 gunicorn==19.6.0
+whitenoise==3.1
