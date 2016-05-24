@@ -1,0 +1,42 @@
+.choose
+  &-list
+    font-size: 0
+    line-height: 0
+    background: #fff
+    padding: 32px
+    border-radius: 0 40px 40px 40px
+  &-item
+    display: inline-block
+    position: relative
+    width: 154px
+    height: 210px
+    margin-left: 43px
+    cursor: pointer
+    img
+      width: inherit
+      height: inherit
+    &:first-child
+      margin-left: 0
+    &._choose-choose
+      &:before
+        content: ''
+        z-index: 10
+        display: block
+        position: absolute
+        top: 0
+        right: 0
+        bottom: 0
+        left: 0
+        background-color: rgba(0,0,0,.5)
+      &:after
+        content: ''
+        position: absolute
+        z-index: 20
+        display: block
+        height: 102px
+        width: 102px
+        top: 50%
+        right: 50%
+        margin: -51px -51px 0 0
+        background: url('~_images/vote@x2.png') no-repeat 0 0;
+        background-size: cover
