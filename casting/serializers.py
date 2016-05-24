@@ -12,7 +12,7 @@ class CastingUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CastingUser
-        fields = ('id', 'url', 'rating', 'counter', 'stars', 'position',)
+        fields = ('id', 'url', 'rating', 'counter', 'stars', 'position', 'user')
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
