@@ -1,10 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<a href="{% url 'social:begin' 'vk-oauth2' %}">Login</a>
-</body>
-</html>
+{% extends "base.html" %}
+{% block application %}
+<div class="auth">
+  <div class="auth-head">
+    <p><b>юТоп</b> - рейтинг людей, где популярность других людей <b>определяете вы!</b></p>
+    <p><b>Чтобы начать - авторизуйтесь через Вконтакте</b></p>
+  </div>
+  <div class="auth-footer">
+    <span class="auth-btn">
+      <i class="auth-btn-img"></i>
+      <a href="{% url 'social:begin' 'vk-oauth2' %}" class="auth-btn-title">Авторизоваться</a>
+    </span>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block application %}
+<div class="choose-wrapper">
+    <div class="choose" data-vk="{{ vk_id }}" data-id="{{ user.id }}">
+      <h1 class="title _choose"><i class="title-image _choose"></i><span class="title-info _choose">{{ user.first_name }}, тебе нужно выбрать свое самое классное фото, ведь по нему будут оценивать тебя.</span></h1>
+      <div class="choose-list">
+      </div>
+      <span class="btn vote-btn js-choose-send">Готово</span>
+    </div>
+  </div>
+
+{% endblock %}

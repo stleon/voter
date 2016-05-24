@@ -1,0 +1,6 @@
+{
+  "application": {
+    "js": "../application/application.js",
+    "css": "../application/application.css"
+  }
+}
