@@ -93,5 +93,5 @@ ENV/
 .venv
 .DS_Store
 
-# frontend
+# front
 frontend/node_modules/
