@@ -378,10 +378,11 @@ body {
   width: 154px;
   height: 210px;
   margin-left: 43px;
-  cursor: pointer; }
+  cursor: pointer;
+  overflow: hidden; }
   .choose-item img {
-    width: inherit;
-    height: inherit; }
+    width: 154px;
+    height: auto; }
   .choose-item:first-child {
     margin-left: 0; }
   .choose-item._choose-choose:before {

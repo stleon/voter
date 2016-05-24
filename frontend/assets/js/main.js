@@ -146,10 +146,11 @@ methods = {
     if(item.length < 1) return false;
 
     var plzgo = function(){
-      window.open("/votes/","_self")
+      window.open('/votes/','_self')
     }
 
-    methods.requests(urls.casting + ids.user + '/', 'patch', json, plzgo());
+    methods.requests(urls.casting + ids.user + '/', 'post', json, plzgo());
+    // methods.requests(urls.casting, 'post', json, plzgo());
 
     
   },
