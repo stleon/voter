@@ -100,7 +100,7 @@
 	        'X-CSRFToken': csrftoken
 	      },
 	      success: function(data){
-	        console.log('data', data);
+	        
 	        if(callback) callback(data);
 	      }
 	    })
@@ -112,7 +112,7 @@
 	      type: type,
 	      dataType: 'jsonp',
 	      success: function(data){
-	        console.log('data', data);
+	        
 	        if(callback) callback(data);
 	      }
 	    })
@@ -178,12 +178,14 @@
 	  },
 	  viewTop: function(data){
 	    var tmp = tmp || {};
-	    var id = nodes.body.attr('data-user');
+	    var id = nodes.body.attr('data-cid');
+	    var uid = nodes.body.attr('data-user');
 	
 	    var view = function(){
 	      var count = 0;
 	      for(var prop in tmp){
-	        nodes.toplist.append( $(t.top(tmp[prop], count, id)) );
+	        // console.log(tmp[prop])
+	        nodes.toplist.append( $(t.top(tmp[prop], count, parseInt(id, 10))) );
 	        count++;
 	      }
 	    }
@@ -208,16 +210,17 @@
 	    var item = nodes.body.find('._choose-choose');
 	    var img = item.find('img');
 	    var src = img.attr('src');
-	    var obj = {url: src};
+	    var obj = {url: src, user: ids.user};
 	    var json = JSON.stringify(obj);
 	
 	    if(item.length < 1) return false;
 	
 	    var plzgo = function(){
-	      window.open("/votes/","_self")
+	      window.open('/votes/','_self')
 	    }
 	
-	    methods.requests(urls.casting + ids.user + '/', 'patch', json, plzgo());
+	    // methods.requests(urls.casting + ids.user + '/', 'post', json, plzgo());
+	    methods.requests(urls.casting, 'post', json, plzgo());
 	
 	    
 	  },
@@ -260,7 +263,7 @@
 	methods.init();
 	
 	function callbackFunc(result){
-	  console.log(result);
+	  
 	}
 
 /***/ },
@@ -292,14 +295,12 @@
 	    return tmp.join('');
 	  },
 	  top: function(obj, count, id){
-	    var tmp = []
-	
-	    console.log(count)
-	    if(count === 2) {
+	    var tmp = [];
+	    console.log(obj.id, id);
+	    if(count === 3) {
 	      tmp.push('<li class="toplist-item _dotted">',
 	        '<i class="toplist-dotted">&hellip;</i>',
 	        '</li>');
-	      return false;
 	    }
 	
 	    tmp.push('<li class="toplist-item');

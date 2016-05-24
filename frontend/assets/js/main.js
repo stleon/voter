@@ -32,7 +32,7 @@ methods = {
         'X-CSRFToken': csrftoken
       },
       success: function(data){
-        console.log('data', data);
+        
         if(callback) callback(data);
       }
     })
@@ -44,7 +44,7 @@ methods = {
       type: type,
       dataType: 'jsonp',
       success: function(data){
-        console.log('data', data);
+        
         if(callback) callback(data);
       }
     })
@@ -110,12 +110,14 @@ methods = {
   },
   viewTop: function(data){
     var tmp = tmp || {};
-    var id = nodes.body.attr('data-user');
+    var id = nodes.body.attr('data-cid');
+    var uid = nodes.body.attr('data-user');
 
     var view = function(){
       var count = 0;
       for(var prop in tmp){
-        nodes.toplist.append( $(t.top(tmp[prop], count, id)) );
+        // console.log(tmp[prop])
+        nodes.toplist.append( $(t.top(tmp[prop], count, parseInt(id, 10))) );
         count++;
       }
     }
@@ -140,7 +142,7 @@ methods = {
     var item = nodes.body.find('._choose-choose');
     var img = item.find('img');
     var src = img.attr('src');
-    var obj = {url: src};
+    var obj = {url: src, user: ids.user};
     var json = JSON.stringify(obj);
 
     if(item.length < 1) return false;
@@ -149,8 +151,8 @@ methods = {
       window.open('/votes/','_self')
     }
 
-    methods.requests(urls.casting + ids.user + '/', 'post', json, plzgo());
-    // methods.requests(urls.casting, 'post', json, plzgo());
+    // methods.requests(urls.casting + ids.user + '/', 'post', json, plzgo());
+    methods.requests(urls.casting, 'post', json, plzgo());
 
     
   },
@@ -193,5 +195,5 @@ methods = {
 methods.init();
 
 function callbackFunc(result){
-  console.log(result);
+  
 }

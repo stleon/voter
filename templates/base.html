@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="{% static "static/application/application.css" %}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
 </head>
-<body data-user="{{ user.id }}">
+<body data-user="{{ user.id }}" data-cid="{{ user.castinguser.id }}">
   <div class="header">
     <a href="/" class="logo"></a>
   </div>

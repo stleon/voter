@@ -23,14 +23,12 @@ templates = {
     return tmp.join('');
   },
   top: function(obj, count, id){
-    var tmp = []
-
-    console.log(count)
-    if(count === 2) {
+    var tmp = [];
+    console.log(obj.id, id);
+    if(count === 3) {
       tmp.push('<li class="toplist-item _dotted">',
         '<i class="toplist-dotted">&hellip;</i>',
         '</li>');
-      return false;
     }
 
     tmp.push('<li class="toplist-item');

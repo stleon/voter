@@ -258,7 +258,7 @@ body {
       border: 10px solid #f28f20; }
     .toplist-avatar img {
       width: inherit;
-      height: inherit; }
+      height: auto; }
   .toplist-info {
     padding-left: 40px; }
   .toplist-name {
@@ -378,10 +378,11 @@ body {
   width: 154px;
   height: 210px;
   margin-left: 43px;
-  cursor: pointer; }
+  cursor: pointer;
+  overflow: hidden; }
   .choose-item img {
-    width: inherit;
-    height: inherit; }
+    width: 154px;
+    height: auto; }
   .choose-item:first-child {
     margin-left: 0; }
   .choose-item._choose-choose:before {
