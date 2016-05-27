@@ -21,37 +21,46 @@ urls = {
 nodes.body = $('body');
 
 methods = {
-  requests: function(url, type, data, callback, el){
-    $.ajax({
+  requests: function(url, type, callback, data, obj){
+    if(!url) {
+      console.log('Error: set url');
+      return false;
+    }
+
+    var params = params || {};
+    var support = support || {};
+
+    params = { // default params
       url: url,
-      data: data,
-      type: type,
+      type: type || 'get',
+      success: function(data){
+        if(callback) callback(data);
+      }
+    }
+    
+    support = { // support params
       contentType: "application/json",
       dataType: 'json',
       headers: {
         'X-CSRFToken': csrftoken
-      },
-      success: function(data){
-        
-        if(callback) callback(data);
       }
-    })
-  },
-  requests_vk: function(url, type, data, callback, el){
-    $.ajax({
-      url: url,
-      data: data,
-      type: type,
-      dataType: 'jsonp',
-      success: function(data){
-        
-        if(callback) callback(data);
-      }
-    })
+    };
+
+    obj = obj || support;
+
+    for(var prop in obj){
+      params[prop] = obj[prop];
+    }
+
+    if (data) params.data = data;
+
+    // console.log(params)
+
+    $.ajax(params);
   },
   getImages: function(){
     //.choose
-    methods.requests_vk(urls.images.start + ids.vk + urls.images.end, 'get', '', methods.viewImages);
+    methods.requests(urls.images.start + ids.vk + urls.images.end, 'get', methods.viewImages, false, {dataType: 'jsonp'});
   },
   vote: function(el){
     var item = el.parents('.vote-item');
@@ -63,13 +72,13 @@ methods = {
     check.removeClass('_choose-vote');
     item.toggleClass('_choose-vote');
 
-    methods.requests(urls.choices + id + '/', 'put', '"' + uuid + '"', methods.reloadVote);
+    methods.requests(urls.choices + id + '/', 'put', methods.reloadVote, '"' + uuid + '"');
   },
   reloadVote: function(){
     if(timer) clearTimeout(timer);
     timer = setTimeout(function(){
       nodes.vote_list.html('');
-      methods.requests(urls.choices, 'post', '', methods.viewVote);
+      methods.requests(urls.choices, 'post', methods.viewVote);
     }, 250)
     
   },
@@ -87,7 +96,14 @@ methods = {
     var obj = data.response
 
     for(var prop in obj){
-      imgs.push(obj[prop].src)
+      // imgs.push(obj[prop].src)
+      imgs.push((function(){
+        if(obj[prop].src_xxxbig) return obj[prop].src_xxxbig;
+        if(obj[prop].src_xxbig) return obj[prop].src_xxbig;
+        if(obj[prop].src_xbig) return obj[prop].src_xbig;
+        if(obj[prop].src_big) return obj[prop].src_big;
+        if(obj[prop].src) return obj[prop].src;
+      }()));
     }
 
     for(var i = 0; i < 4; i++){
@@ -95,6 +111,7 @@ methods = {
     }
   },
   viewVote: function(data){
+    console.log(data);
     var obj = data;
     var tmp = {};
     nodes.vote_list.attr('data-vote-id', obj.id);
@@ -103,6 +120,7 @@ methods = {
       // nodes.vote_list.append( $( t.vote() ) );
       var user = obj.users[i];
       for(var prop in user){
+        console.log(user);
         nodes.vote_list.append( $( t.vote(prop, user[prop]) ) );
       }
     }
@@ -113,30 +131,41 @@ methods = {
     var id = nodes.body.attr('data-cid');
     var uid = nodes.body.attr('data-user');
 
-    var view = function(){
-      var count = 0;
-      for(var prop in tmp){
-        // console.log(tmp[prop])
-        nodes.toplist.append( $(t.top(tmp[prop], count, parseInt(id, 10))) );
-        count++;
+    var getUserInfo = function(obj){
+      var result;
+      for(var i = 0; i < data.length; i++){
+        if(data[i].info.id === obj.user) {
+          result = false;
+          break;
+        } else {
+          result = obj;
+        }
       }
-    }
-
-    var diff = function(obj){
-      tmp[obj.rating] = obj;
-      pars(data);
+      pars(result);
     };
 
-    var pars = function(data){
+    var pars = function(obj){
       for(var i = 0; i < data.length; i++){
-        // nodes.toplist.append( $(t.top(data[i], i)) );
-        tmp[data[i].rating] = data[i];
+        tmp[i] = data[i];
+      }
+
+      if(obj) {
+        var num = data.length;
+        tmp[num] = obj;
       }
 
       view();
     };
 
-    methods.requests(urls.casting + id + '/', 'get', '', diff);
+    var view = function(){
+      var count = 0;
+      for(var prop in tmp){
+        nodes.toplist.append( $(t.top(tmp[prop], count, parseInt(uid, 10))) );
+        count++;
+      }
+    }
+
+    methods.requests(urls.casting + id + '/', 'get', getUserInfo);
   },
   sendChoose: function(){
     var item = nodes.body.find('._choose-choose');
@@ -152,7 +181,7 @@ methods = {
     }
 
     // methods.requests(urls.casting + ids.user + '/', 'post', json, plzgo());
-    methods.requests(urls.casting, 'post', json, plzgo());
+    methods.requests(urls.casting, 'post', plzgo(), json);
 
     
   },
@@ -185,8 +214,8 @@ methods = {
     ids.user = nodes.choose.data('id');
 
     if(nodes.choose.length > 0) methods.getImages();
-    if(nodes.vote_list.length > 0) methods.requests(urls.choices, 'post', '', methods.viewVote);
-    if(nodes.toplist.length > 0) methods.requests(urls.casting + 'top/', 'get', '', methods.viewTop);
+    if(nodes.vote_list.length > 0) methods.requests(urls.choices, 'post', methods.viewVote);
+    if(nodes.toplist.length > 0) methods.requests(urls.casting + 'top/', 'get', methods.viewTop);
 
     
   }
