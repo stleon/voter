@@ -179,7 +179,6 @@
 	    }
 	  },
 	  viewVote: function(data){
-	    console.log(data);
 	    var obj = data;
 	    var tmp = {};
 	    nodes.vote_list.attr('data-vote-id', obj.id);
@@ -188,7 +187,6 @@
 	      // nodes.vote_list.append( $( t.vote() ) );
 	      var user = obj.users[i];
 	      for(var prop in user){
-	        console.log(user);
 	        nodes.vote_list.append( $( t.vote(prop, user[prop]) ) );
 	      }
 	    }
