@@ -22,7 +22,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = User
-        fields = ('first_name',)
+        fields = ('first_name', 'id')
 
 
 class TopSerializer(serializers.ModelSerializer):
